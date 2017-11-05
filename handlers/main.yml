@@ -1,0 +1,5 @@
+---
+- name: apply sysctl
+  service:
+    name: procps
+    state: started

@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Jason Harley
+  description: An example Ansible base role
+  license: Apache License 2.0
+  min_ansible_version: 2.4
+  version: 1.0.0
+
+  platforms:
+    - name: Ubuntu
+      versions:
+        - xenial
+        - trusty
+
+dependencies: []

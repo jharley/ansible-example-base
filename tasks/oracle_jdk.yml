@@ -1,0 +1,25 @@
+---
+- name: Add JDK8 PPA
+  apt_repository:
+    repo: ppa:webupd8team/java
+    state: present
+    update_cache: yes
+
+- name: Accept Oracle Licence v1.1 for Java 8
+  debconf:
+    name: oracle-java8-installer
+    question: shared/accepted-oracle-license-v1-1
+    value: "true"
+    vtype: select
+
+- name: Install Oracle JDK8
+  apt:
+    name: oracle-java8-installer
+    state: present
+    force: yes
+
+- name: Symlink /usr/jdk8 to /usr/lib/jvm/java-8-oracle
+  file:
+    dest: /usr/jdk8
+    src: /usr/lib/jvm/java-8-oracle
+    state: link

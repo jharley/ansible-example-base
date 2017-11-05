@@ -1,0 +1,8 @@
+---
+- name: import base task
+  import_tasks: base.yml
+
+- name: import Oracle JDK task
+  import_tasks: oracle_jdk.yml
+  when:
+    - install_oracle_jdk|bool

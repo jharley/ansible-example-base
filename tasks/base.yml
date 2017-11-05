@@ -1,0 +1,55 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Install base packages
+  apt:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - ntp
+    - jq
+    - python2.7
+    - python-pip
+    - rng-tools
+    - sysstat
+    - unzip
+    - vim-tiny
+
+- name: Set default editor
+  alternatives:
+    name: editor
+    path: /usr/bin/vim.tiny
+
+- name: Remove bloated login banners
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/update-motd.d/10-help-text
+    - /etc/update-motd.d/51-cloudguest
+
+- name: Configure sysctl baseline
+  template:
+    src: sysctl-baseline.conf.j2
+    dest: /etc/sysctl.d/10-baseline.conf
+    mode: 0444
+  notify:
+    - apply sysctl
+
+- name: rng-tools init script idempotence fix
+  copy:
+    src: trusty/rng-tools.init
+    dest: /etc/init.d/rng-tools
+    mode: 0755
+  when: ansible_distribution_release|lower == "trusty"
+
+- name: Enable rngd entropy daemon
+  service:
+    name: rng-tools
+    state: started
+    enabled: yes
