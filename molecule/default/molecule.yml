@@ -10,10 +10,6 @@ platforms:
     image: ubuntu:16.04
     privileged: true
     command: /sbin/init
-  - name: trusty
-    image: ubuntu-upstart:14.04
-    privileged: true
-    command: /sbin/init
 provisioner:
   name: ansible
   lint:
