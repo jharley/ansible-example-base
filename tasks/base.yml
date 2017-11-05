@@ -41,13 +41,6 @@
   notify:
     - apply sysctl
 
-- name: rng-tools init script idempotence fix
-  copy:
-    src: trusty/rng-tools.init
-    dest: /etc/init.d/rng-tools
-    mode: 0755
-  when: ansible_distribution_release|lower == "trusty"
-
 - name: Enable rngd entropy daemon
   service:
     name: rng-tools

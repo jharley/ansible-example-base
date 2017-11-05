@@ -1,11 +1,12 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/python:2.7
+    working_directory: ~/ansible-example-base
+    checkout:
+      path: ~/ansible-example-base
+    machine: true
     steps:
       - checkout
-      - setup_remote_docker
       - restore_cache:
           keys:
             - v1-test-deps-{{ arch }}-{{ .Branch }}-{{ checksum "requirements.txt" }}
@@ -13,26 +14,15 @@ jobs:
       - run:
           name: Setup test environment dependencies
           command: |
-            python -m virtualenv venv
-            . venv/bin/activate
+            python -m virtualenv ~/venv
+            . ~/venv/bin/activate
             pip install -r requirements.txt
       - save_cache:
           key: v1-test-deps-{{ arch }}-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
-            - venv
-      - run:
-          name: Lint and validate syntax
-          command: |
-            . venv/bin/activate
-            molecule lint
-            molecule syntax
+            - ~/venv
       - run:
           name: Test Ansible role
           command: |
-            . venv/bin/activate
+            . ~/venv/bin/activate
             molecule test
-      - run:
-          name: Verify resulting infrastructure
-          command: |
-            . venv/bin/activate
-            molecule verify
