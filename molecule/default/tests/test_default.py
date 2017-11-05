@@ -8,11 +8,13 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 
 @pytest.mark.parametrize('f',
-                         ['/etc/update-motd.d/10-help-text', '/etc/update-motd.d/51-cloudguest'])
+                         ['/etc/update-motd.d/10-help-text',
+                          '/etc/update-motd.d/51-cloudguest'])
 def test_banners_removed(host, f):
     f = host.file(f)
 
     assert not f.exists
+
 
 def test_rngd_service(host):
     package = host.package('rng-tools')
@@ -21,6 +23,7 @@ def test_rngd_service(host):
     assert package.is_installed
     assert service.is_enabled
     assert service.is_running
+
 
 def test_system_editor(host):
     package = host.package('vim-tiny')

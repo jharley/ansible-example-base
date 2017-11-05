@@ -1,3 +1,7 @@
+ignore: |
+  venv
+  .circleci
+
 extends: default
 
 rules:
